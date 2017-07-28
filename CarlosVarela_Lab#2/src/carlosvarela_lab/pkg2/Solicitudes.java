@@ -24,8 +24,22 @@ public class Solicitudes {
         this.estado = estado;
     }
     
+    //Gets
+    
+    public String getEmisor(){
+        return receptor;
+    }
     public int getEstado(){
         return estado;
+    }
+    public String getReceptor(){
+        return receptor;
+    }
+    //ToString
+
+    @Override
+    public String toString() {
+        return "Solicitud de: " +emisor;
     }
     
 }

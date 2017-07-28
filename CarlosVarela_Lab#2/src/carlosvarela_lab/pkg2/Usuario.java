@@ -54,6 +54,11 @@ public class Usuario {
         return password;
     }
     
+    public String getNombre(){
+        return nombre;
+    }
+    
+    
     @Override
     public String toString() {
         return "{ "+"Nombre: "+nombre+"| Username: "+username+"| hometown: "+hometown+" | edad: "+edad+" }";

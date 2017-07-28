@@ -14,15 +14,14 @@ public class CarlosVarela_Lab2 {
 
     static Scanner sc = new Scanner(System.in);
     static ArrayList<Usuario> users = new ArrayList();
+    static ArrayList<Solicitudes> solicitudes = new ArrayList();
     static int opcion;
     static boolean resp;
+    static String Nombre, password, hometown, username, confirmacion;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        
-        String Nombre, password, hometown, username;
         int edad, posicion;
         do {
             resp=true;
@@ -105,30 +104,69 @@ public class CarlosVarela_Lab2 {
         System.out.println("\n= = = = = Bienvenido: "+users.get(user).getUsername()+" = = = = ");
         do{
             System.out.print("1. Agregar amigos\n"
-                    + "2. Agregar amigos\n"
-                    + "3. Solicitudes \n"
-                    + "4. Enviar Mensajes \n"
-                    + "5. Buzón \n"
-                    + "6. Eliminar Mensajes \n"
-                    + "7. Eliminar amigo \n"
-                    + "8. Salir\n "
+                    + "2. Solicitudes \n"
+                    + "3. Enviar Mensajes \n"
+                    + "4. Buzón \n"
+                    + "5. Eliminar Mensajes \n"
+                    + "6. Eliminar amigo \n"
+                    + "7. Salir\n "
                     + "Ingrese opcion: ");
             opcion = sc.nextInt();
             switch(opcion){
                 case 1:
-                    System.out.println(" --Lista de Usuarios registrados--");
+                    System.out.println(" --Lista de Usuarios registrados--\n");
                     for (Usuario amigo : users) {
-                        System.out.println(amigo);
+                        if (!amigo.getNombre().equalsIgnoreCase(users.get(user).getNombre())) {
+                            System.out.println(amigo);
+                        }
                     }
-                    System.out.print("1. Enviar Solicitud\n"
+                    System.out.print("\n1. Enviar Solicitud\n"
                             + "2. Salir\n"
                             + "Ingrese: ");
                     numero = sc.nextInt();
                     if (numero==1) {
-                        System.out.print("Ingrese nombre: ");
+                        System.out.print("Ingrese nombre o username: ");
+                        Nombre = sc.next();
+                        while (enviar_solicitud(Nombre, user)==false){
+                            System.out.print("Probablemente ingreso mal el nombre de usuario\n"
+                                    + "Ingrese de nuevo: ");
+                            Nombre = sc.next(); 
+                        }
+                        System.out.println(" ¡Solicitud enviada con exito!");
                     }
+                    System.out.println("Menu... ");
                     break;
                 case 2:
+                    System.out.println(" --Lista de solicitudes--\n ");
+                    for (Solicitudes s : solicitudes) {
+                        if (s.getReceptor().equalsIgnoreCase(users.get(user).getUsername())  || s.getReceptor().equalsIgnoreCase(users.get(user).getNombre()) && s.getEstado()==2) {
+                            System.out.println(s);
+                        }
+                    }
+                    System.out.print("¿Confirmar, rechazar o nada?: ");
+                    confirmacion = sc.next();
+                    if (confirmacion.equalsIgnoreCase("Confirmar")) {
+                        System.out.print("Ingrese el nombre de quien mando la solicitud: ");
+                        nombre = sc.next();
+                        for (Solicitudes s : solicitudes) {
+                            if (s.getEmisor().equalsIgnoreCase(nombre) && s.getEmisor().equalsIgnoreCase(users.get(user).getNombre())) {
+                                s.setEstado(1);
+                            }
+                        }
+                    }else if (confirmacion.equalsIgnoreCase("rechazar")) {
+                        System.out.print("Ingrese el nombre de quien mando la solicitud: ");
+                        nombre = sc.next();
+                        for (Solicitudes s : solicitudes) {
+                            if (s.getEmisor().equalsIgnoreCase(nombre) && s.getEmisor().equalsIgnoreCase(users.get(user).getNombre())) {
+                                solicitudes.remove(s);
+                            }
+                        }
+                    }else if (confirmacion.equalsIgnoreCase("nada")) {
+                        System.out.println("Okay :'v");
+                    }else {
+                        System.out.println("¡Probablemente puso algo erroneo!");
+                    }
+                    System.out.println("Menu... ");
                     break;
                 case 3:
                     break;
@@ -138,11 +176,7 @@ public class CarlosVarela_Lab2 {
                     break;
                 case 6:
                     break;
-                case 7:
-                    break;
-                case 8:
-                    break;
-                default:
+                default:    
                     System.out.println("Que tenga lindo día ;v");
                     resp = false;
                     break;    
@@ -165,6 +199,20 @@ public class CarlosVarela_Lab2 {
             }
         }
         return confirmado;
+    }
+    
+    
+    static public boolean enviar_solicitud(String nombre, int pos){
+        boolean conf = false;
+        for (Usuario user : users) {
+            if (user.getUsername().equalsIgnoreCase(nombre) || user.getNombre().equals(nombre)) {
+                conf = true;
+            }
+        }       
+        if (conf) {
+            solicitudes.add(new Solicitudes(nombre, users.get(pos).getNombre(), 2));
+        }
+        return conf;
     }
     
 }
