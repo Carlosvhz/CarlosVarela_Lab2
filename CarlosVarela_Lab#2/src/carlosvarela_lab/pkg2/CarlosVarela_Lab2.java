@@ -57,12 +57,12 @@ public class CarlosVarela_Lab2 {
                     System.out.println(" - - - - Eliminar Usuario - - - -");
                     System.out.print("¿Que usuario desea eliminar?: ");
                     posicion = sc.nextInt();
-                    while(posicion>users.size()||posicion<users.size()){
-                        System.out.println("\n###Porfavor, ingrese un numero de usuario existente###\n");
-                        System.out.print("Ingrese: ");
-                        posicion = sc.nextInt();
-                    }
-                    users.remove(posicion);
+                    if (posicion>users.size() || users.size()==0 || posicion<0) {
+                        System.out.println("¡¡No hay usuarios existentes para eliminar!!");
+                    }else{
+                        users.remove(posicion);
+                        System.out.println("  Usuario numero "+posicion+" Eliminado");
+                    }  
                     break;
                 case 3:
                     
@@ -138,34 +138,38 @@ public class CarlosVarela_Lab2 {
                     break;
                 case 2:
                     System.out.println(" --Lista de solicitudes--\n ");
-                    for (Solicitudes s : solicitudes) {
-                        if (s.getReceptor().equalsIgnoreCase(users.get(user).getUsername())  || s.getReceptor().equalsIgnoreCase(users.get(user).getNombre()) && s.getEstado()==2) {
-                            System.out.println(s);
-                        }
-                    }
-                    System.out.print("¿Confirmar, rechazar o nada?: ");
-                    confirmacion = sc.next();
-                    if (confirmacion.equalsIgnoreCase("Confirmar")) {
-                        System.out.print("Ingrese el nombre de quien mando la solicitud: ");
-                        nombre = sc.next();
+                    if(solicitudes.size()>0){
                         for (Solicitudes s : solicitudes) {
-                            if (s.getEmisor().equalsIgnoreCase(nombre) && s.getEmisor().equalsIgnoreCase(users.get(user).getNombre())) {
-                                s.setEstado(1);
+                            if (s.getReceptor().equalsIgnoreCase(users.get(user).getUsername())  || s.getReceptor().equalsIgnoreCase(users.get(user).getNombre()) && s.getEstado()==2) {
+                                System.out.println(s);
                             }
                         }
-                    }else if (confirmacion.equalsIgnoreCase("rechazar")) {
-                        System.out.print("Ingrese el nombre de quien mando la solicitud: ");
-                        nombre = sc.next();
-                        for (Solicitudes s : solicitudes) {
-                            if (s.getEmisor().equalsIgnoreCase(nombre) && s.getEmisor().equalsIgnoreCase(users.get(user).getNombre())) {
-                                solicitudes.remove(s);
+                        System.out.print("¿Confirmar, rechazar o nada?: ");
+                        confirmacion = sc.next();
+                        if (confirmacion.equalsIgnoreCase("Confirmar")) {
+                            System.out.print("Ingrese el nombre de quien mando la solicitud: ");
+                            nombre = sc.next();
+                            for (Solicitudes s : solicitudes) {
+                                if (s.getEmisor().equalsIgnoreCase(nombre) && s.getEmisor().equalsIgnoreCase(users.get(user).getNombre())) {
+                                    s.setEstado(1);
+                                }
                             }
+                        }else if (confirmacion.equalsIgnoreCase("rechazar")) {
+                            System.out.print("Ingrese el nombre de quien mando la solicitud: ");
+                            nombre = sc.next();
+                            for (Solicitudes s : solicitudes) {
+                                if (s.getEmisor().equalsIgnoreCase(nombre) && s.getEmisor().equalsIgnoreCase(users.get(user).getNombre())) {
+                                    solicitudes.remove(s);
+                                }
+                            }
+                        }else if (confirmacion.equalsIgnoreCase("nada")) {
+                            System.out.println("Okay :'v");
+                        }else {
+                            System.out.println("¡Probablemente puso algo erroneo!");
                         }
-                    }else if (confirmacion.equalsIgnoreCase("nada")) {
-                        System.out.println("Okay :'v");
-                    }else {
-                        System.out.println("¡Probablemente puso algo erroneo!");
-                    }
+                    }else{
+                        System.out.println(" No tienes amigos :'v\n");
+                    }    
                     System.out.println("Menu... ");
                     break;
                 case 3:
@@ -175,6 +179,20 @@ public class CarlosVarela_Lab2 {
                 case 5:
                     break;
                 case 6:
+                    System.out.println(" --Lista de amigos--\n");
+                    for (Solicitudes s : solicitudes) {
+                        if (s.getReceptor().equalsIgnoreCase(users.get(user).getUsername()) && s.getEstado()==1) {
+                            System.out.println(s.getEmisor());
+                        }
+                    }
+                    System.out.print("1. Eliminar\n"
+                            + "2. Salir\n"
+                            + "Ingrese opcion: ");
+                    numero = sc.nextInt();
+                    if (numero==1) {
+                        
+                    }
+                    
                     break;
                 default:    
                     System.out.println("Que tenga lindo día ;v");
@@ -204,13 +222,15 @@ public class CarlosVarela_Lab2 {
     
     static public boolean enviar_solicitud(String nombre, int pos){
         boolean conf = false;
+        String emisor="";
         for (Usuario user : users) {
             if (user.getUsername().equalsIgnoreCase(nombre) || user.getNombre().equals(nombre)) {
                 conf = true;
+                emisor = user.getNombre();
             }
         }       
         if (conf) {
-            solicitudes.add(new Solicitudes(nombre, users.get(pos).getNombre(), 2));
+            solicitudes.add(new Solicitudes(emisor, users.get(pos).getNombre(), 2));
         }
         return conf;
     }
