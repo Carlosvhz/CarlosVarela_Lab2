@@ -15,6 +15,7 @@ public class CarlosVarela_Lab2 {
     static Scanner sc = new Scanner(System.in);
     static ArrayList<Usuario> users = new ArrayList();
     static ArrayList<Solicitudes> solicitudes = new ArrayList();
+    static ArrayList<Amigos> amigos = new ArrayList();
     static int opcion;
     static boolean resp;
     static String Nombre, password, hometown, username, confirmacion;
@@ -65,7 +66,57 @@ public class CarlosVarela_Lab2 {
                     }  
                     break;
                 case 3:
-                    
+                    System.out.println(" - - - - Modificar Usuarios - - - - ");
+                    if (users.size()>0) {
+                        for (Usuario x : users) {
+                            System.out.println(x);
+                        }
+                        System.out.print("¿Que usuario desea modificar? ingrese numero: ");
+                        int num = sc.nextInt();
+                        while (num>users.size() || num<0){
+                            System.out.print("Ingrese numeros de usuarios existentes\n"
+                                    + "Ingrese de nuevo: ");
+                            num = sc.nextInt();
+                        }
+                        System.out.print("¿Que desea modificar?\n"
+                                + "1. Nombre\n"
+                                + "2. Edad\n"
+                                + "3. Lugar de nacimiento\n"
+                                + "4. Username\n"
+                                + "Ingrese: ");
+                        int op  = sc.nextInt();
+                        switch(op){
+                            case 1:
+                                System.out.print("Ingrese nuevo nombre: ");
+                                Nombre = sc.next();
+                                users.get(num).setNombre(Nombre);
+                                System.out.println(" ¡Hecho! ");
+                                break;
+                            case 2:
+                                System.out.print("Ingrese nueva edad: ");
+                                edad = sc.nextInt();
+                                users.get(num).setOld(edad);
+                                System.out.println(" ¡Hecho! ");
+                                break;
+                            case 3:
+                                System.out.print("Ingrese nuevo lugar de nacimiento: ");
+                                hometown = sc.next();
+                                users.get(num).setHometown(hometown);
+                                System.out.println(" ¡Hecho! ");
+                                break;
+                            case 4:
+                                System.out.print("Ingrese nuevo username: ");
+                                username = sc.next();
+                                users.get(num).setUsername(username);
+                                System.out.println(" ¡Hecho! ");
+                                break;
+                            default:
+                                System.out.println(" Opcion no existente. ");
+                                break;
+                        }
+                    }else{
+                        System.out.println(" ¡¡No hay usuarios para modificar!! ");
+                    }
                     break;
                 case 4:
                     System.out.println(" - - - - LogIn - - - -");
@@ -152,6 +203,7 @@ public class CarlosVarela_Lab2 {
                             for (Solicitudes s : solicitudes) {
                                 if (s.getEmisor().equalsIgnoreCase(nombre) && s.getEmisor().equalsIgnoreCase(users.get(user).getNombre())) {
                                     s.setEstado(1);
+                                    amigos.add(new Amigos (users.get(user).getNombre(), s.getEmisor()));
                                 }
                             }
                         }else if (confirmacion.equalsIgnoreCase("rechazar")) {
@@ -180,19 +232,11 @@ public class CarlosVarela_Lab2 {
                     break;
                 case 6:
                     System.out.println(" --Lista de amigos--\n");
-                    for (Solicitudes s : solicitudes) {
-                        if (s.getReceptor().equalsIgnoreCase(users.get(user).getUsername()) && s.getEstado()==1) {
-                            System.out.println(s.getEmisor());
+                    for (Amigos m : amigos) {
+                        if (m.Minombre.equalsIgnoreCase(users.get(user).getNombre())) {
+                            System.out.println(m.getNomAmigo());
                         }
                     }
-                    System.out.print("1. Eliminar\n"
-                            + "2. Salir\n"
-                            + "Ingrese opcion: ");
-                    numero = sc.nextInt();
-                    if (numero==1) {
-                        
-                    }
-                    
                     break;
                 default:    
                     System.out.println("Que tenga lindo día ;v");
