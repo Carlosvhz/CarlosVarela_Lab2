@@ -225,10 +225,13 @@ public class CarlosVarela_Lab2 {
                     System.out.println("Menu... ");
                     break;
                 case 3:
+                    System.out.println("NO REALIZADO");
                     break;
                 case 4:
+                    System.out.println("NO REALIZADO");
                     break;
                 case 5:
+                    System.out.println("NO REALIZADO");
                     break;
                 case 6:
                     System.out.println(" --Lista de amigos--\n");
